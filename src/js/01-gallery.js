@@ -1,6 +1,6 @@
+'use strict';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
 const images = [
   {
     preview:
@@ -66,28 +66,26 @@ const images = [
     description: 'Lighthouse Coast Sea',
   },
 ];
-document.addEventListener('DOMContentLoaded', function () {
-  const list = document.querySelector('.gallery');
-  if (!list) {
-    console.error('Element with class .gallery not found!');
-    return;
-  }
-  list.insertAdjacentHTML('afterbegin', createMarkup(images));
-  const lightbox = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionDelay: 250,
-  });
+const gallery = document.querySelector('.gallery');
+const img = images
+  .map(
+    image =>
+      `<li class="gallery-item">
+  <a class="gallery-link" href="${image.original}">
+    <img
+      class="gallery-image"
+      src="${image.preview}"
+      
+      alt="${image.description}"
+      width=360 height=200
+    />
+  </a>
+</li>`
+  )
+  .join('');
+gallery.insertAdjacentHTML('beforeend', img);
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionDelay: 250,
+  captionPosition: 'bottom',
+  captionsData: 'alt',
 });
-function createMarkup(arr) {
-  return arr
-    .map(
-      ({ preview, original, description }) => `
-            <li class="gallery-item">
-                <a class="gallery-link" href="${original}" data-lightbox="gallery" data-title="${description}">
-                    <img class="gallery-image" src="${preview}" alt="${description}">
-                </a>
-            </li>
-        `
-    )
-    .join('');
-}
